@@ -14,8 +14,8 @@ export function Header() {
         gap: '30px',
         justifyContent: 'center'
       }}>
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           style={{
             textDecoration: 'none',
             color: 'black',
@@ -24,9 +24,9 @@ export function Header() {
         >
           Home
         </Link>
-        
-        <Link 
-          href="/Mint" 
+
+        <Link
+          href="/Mint"
           style={{
             textDecoration: 'none',
             color: 'black',
@@ -35,9 +35,9 @@ export function Header() {
         >
           Mint
         </Link>
-        
-        <Link 
-          href="/Burn" 
+
+        <Link
+          href="/Burn"
           style={{
             textDecoration: 'none',
             color: 'black',
@@ -46,6 +46,19 @@ export function Header() {
         >
           Burn
         </Link>
+
+        <Link
+          href="/SmartContract"
+          style={{
+            textDecoration: 'none',
+            color: 'black',
+            fontSize: '18px'
+          }}
+        >
+          Smart Contract
+        </Link>
+
+
       </nav>
     </header>
   );

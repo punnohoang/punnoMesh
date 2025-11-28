@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useWallet } from "@meshsdk/react";
-import { pinata } from "~/utils/config";
 import {
   MeshTxBuilder,
   ForgeScript,
@@ -26,11 +25,26 @@ export default function MintForm() {
     if (!file) return alert("No file selected");
     try {
       setUploading(true);
+      // Get signed upload URL from backend
       const urlRes = await fetch("/api/url").then((res) => res.json());
-      const upload = await pinata.upload.public.file(file).url(urlRes.url);
-      setIpfsHash(upload.cid || "");
-      setUploading(false);
-      alert("File uploaded!");
+
+      // Upload file to Pinata via backend API route (avoids CORS)
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("url", urlRes.url);
+
+      const uploadRes = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      }).then((res) => res.json());
+
+      if (uploadRes.cid) {
+        setIpfsHash(uploadRes.cid);
+        setUploading(false);
+        alert("File uploaded!");
+      } else {
+        throw new Error(uploadRes.error || "Unknown error");
+      }
     } catch (e) {
       console.log(e);
       setUploading(false);
@@ -75,7 +89,7 @@ export default function MintForm() {
 
       const signedTx = await wallet.signTx(unsignedTx);
       const hash = await wallet.submitTx(signedTx);
-      
+
       setTxHash(hash);
       setMinting(false);
       alert("Minted!");
@@ -97,7 +111,7 @@ export default function MintForm() {
       width: "100%",
       maxWidth: "400px"
     }}>
-      
+
       <div>
         <h3>Upload Image</h3>
         <input
@@ -167,7 +181,7 @@ export default function MintForm() {
         >
           {minting ? "Minting..." : `Mint ${assetQuantity} Asset${assetQuantity > 1 ? 's' : ''}`}
         </button>
-        
+
         {!connected && <p style={{ color: "red", fontSize: "12px", textAlign: "center" }}>Connect wallet first</p>}
         {txHash && <p style={{ color: "green", fontSize: "12px", wordBreak: "break-all" }}>Success! TX: {txHash}</p>}
       </div>

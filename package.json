@@ -11,8 +11,9 @@
   "dependencies": {
     "@meshsdk/core": "^1.9.0-beta.76",
     "@meshsdk/react": "^1.9.0-beta.76",
+    "axios": "^1.13.2",
     "next": "15.5.4",
-    "pinata": "^2.5.0",
+    "pinata": "^2.5.1",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
